@@ -1,7 +1,10 @@
 ## How to Setup
 
-1. Change `ISSUE_NUMBER` to the current issue number
-2. Run `export BUFFER_ACCESS_TOKEN=1/deadbeefbaffed` to make sure the
+1. Run `export BUFFER_ACCESS_TOKEN=1/deadbeefbaffed` to make sure the
    `BUFFER_ACCESS_TOKEN` is set. Run `echo $BUFFER_ACCESS_TOKEN` to make
 sure it is setup correctly.
-3. Run `ruby buffer.rb` to buffer to Twitter
+
+Or, assuming that `BUFFER_ACCESS_TOKEN` is in your `.env`, run `export
+$(cat .env)` before you run the command
+
+2. Run `ruby buffer.rb <issue-number>` to buffer to Twitter

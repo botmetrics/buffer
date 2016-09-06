@@ -30,9 +30,13 @@ def get_response(url, referer)
 end
 
 
-ISSUE_NUMBER = "24"
+issue_number = ARGV[0].to_s.strip
+if issue_number == ""
+  puts "Usage: ruby buffer.rb <issue-number>"
+  exit(1)
+end
 
-response = get_response("http://botweekly.com/issues/#{ISSUE_NUMBER}", 'http://botweekly.com')
+response = get_response("http://botweekly.com/issues/#{issue_number}", 'http://botweekly.com')
 doc = Nokogiri::HTML.parse(response)
 client = Buffer::Client.new(ENV['BUFFER_ACCESS_TOKEN'])
 
@@ -55,12 +59,12 @@ doc.css('div.item--link a > img').each do |image_elem|
   end
 
   if !link_id.nil? && !title.nil? && !image.nil?
-    link = "http://botweekly.com/issues/#{ISSUE_NUMBER}##{link_id}"
+    link = "http://botweekly.com/issues/#{issue_number}##{link_id}"
 
     response = client.create_update(
       body: {
         profile_ids: PROFILE_IDS,
-        text: "Issue #{ISSUE_NUMBER}: #{title}\n\n#{link}",
+        text: "Issue #{issue_number}: #{title}\n\n#{link}",
         shorten: false,
         media: {
           link: link,
