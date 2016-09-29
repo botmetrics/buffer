@@ -7,4 +7,4 @@ sure it is setup correctly.
 Or, assuming that `BUFFER_ACCESS_TOKEN` is in your `.env`, run `export
 $(cat .env)` before you run the command
 
-2. Run `ruby buffer.rb <issue-number>` to buffer to Twitter
+2. Run `ruby buffer.rb <issue-number> <optional-item-from-which-to-start>` to buffer to Twitter
