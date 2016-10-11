@@ -31,10 +31,18 @@ end
 
 
 issue_number = ARGV[0].to_s.strip
+start_item = ARGV[1].to_i
+
 if issue_number == ""
   puts "Usage: ruby buffer.rb <issue-number>"
   exit(1)
 end
+
+if start_item == ""
+  start_item=0
+end
+
+current_item = 0
 
 response = get_response("http://botweekly.com/issues/#{issue_number}", 'http://botweekly.com')
 doc = Nokogiri::HTML.parse(response)
@@ -60,23 +68,25 @@ doc.css('div.item--link a > img').each do |image_elem|
 
   if !link_id.nil? && !title.nil? && !image.nil?
     link = "http://botweekly.com/issues/#{issue_number}##{link_id}"
+    current_item += 1
+    if current_item >= start_item
 
-    response = client.create_update(
-      body: {
-        profile_ids: PROFILE_IDS,
-        text: "Issue #{issue_number}: #{title}\n\n#{link}",
-        shorten: false,
-        media: {
-          link: link,
-          photo: image
+      response = client.create_update(
+        body: {
+          profile_ids: PROFILE_IDS,
+          text: "Issue #{issue_number}: #{title}\n\n#{link}",
+          shorten: false,
+          media: {
+            link: link,
+            photo: image
+          }
         }
-      }
-    )
-
-    if response.success
-      puts "Submitted #{title} | #{link} | #{image} to Buffer!"
-    else
-      puts "Error submitting #{title}, response: #{response.inspect}"
-    end
+      )
+      if response.success
+        puts "Submitted #{title} | #{link} | #{image} to Buffer!"
+      else
+        puts "Error submitting #{title}, response: #{response.inspect}"
+      end
+   end
   end
 end
